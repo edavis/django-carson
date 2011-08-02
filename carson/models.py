@@ -5,8 +5,8 @@ from carson.utils import parse_created_at
 from carson.managers import TrustedManager, UntrustedManager
 
 class Account(models.Model):
-    twitter_username = models.CharField(max_length=32)
-    twitter_id = models.PositiveIntegerField()
+    twitter_username = models.CharField("Username", help_text="Minus the '@' sign", max_length=32)
+    twitter_id = models.PositiveIntegerField("Twitter ID", editable=False, null=True)
 
     def __unicode__(self):
         return u"@%s" % self.twitter_username
@@ -53,7 +53,7 @@ class Tweet(models.Model):
 
         values['account'] = account
 
-        sys.stdout.write("Added %d\r" % tweet['id'])
+        sys.stdout.write("Added #%d\r" % tweet['id'])
         sys.stdout.flush()
 
         return cls.objects.create(**values)
