@@ -2,6 +2,7 @@ import sys
 import json
 from django.db import models
 from carson.utils import parse_created_at
+from carson.managers import TrustedManager, UntrustedManager
 
 class Account(models.Model):
     twitter_username = models.CharField(max_length=32)
@@ -21,6 +22,10 @@ class Tweet(models.Model):
     tweet_id = models.BigIntegerField()
     timestamp = models.DateTimeField()
     text = models.TextField()
+
+    objects = models.Manager()
+    trusted = TrustedManager()
+    untrusted = UntrustedManager()
 
     def __unicode__(self):
         return unicode(self.tweet_id)
