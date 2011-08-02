@@ -30,6 +30,9 @@ class Tweet(models.Model):
     def __unicode__(self):
         return unicode(self.tweet_id)
 
+    class Meta:
+        ordering = ["-timestamp"]
+
     @classmethod
     def add(cls, tweet):
         # Only load if passed a string
