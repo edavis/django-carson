@@ -45,5 +45,7 @@ class Tweet(models.Model):
 
         values['account'] = account
 
-        sys.stdout.write("Added %d\n" % tweet['id'])
+        sys.stdout.write("Added %d\r" % tweet['id'])
+        sys.stdout.flush()
+
         return cls.objects.create(**values)
