@@ -28,7 +28,7 @@ class Tweet(models.Model):
     untrusted = UntrustedManager()
 
     def __unicode__(self):
-        return unicode(self.tweet_id)
+        return u"#%d" % self.tweet_id
 
     class Meta:
         ordering = ["-timestamp"]
