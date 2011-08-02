@@ -61,7 +61,7 @@ Getting Started
 
 #) Finally, run::
 
-    $ ./manage.py run_carson
+    $ ./manage.py get_tweets
 
 .. _Create a new application: https://dev.twitter.com/apps/new
 .. _admin interface: http://localhost:8000/admin/carson/
