@@ -35,7 +35,6 @@ Getting Started
 
 #) Configure your URLconf::
 
-    # urls.py
     from django.conf.urls.defaults import patterns, include, url
     from django.contrib import admin
     admin.autodiscover()
@@ -54,14 +53,10 @@ Getting Started
 
    Add these tokens to settings.py:
 
-   ===================  ===============
-       twitter.com        settings.py
-   ===================  ===============
-   Consumer key         CONSUMER_KEY
-   Consumer secret      CONSUMER_SECRET
-   Access token         TOKEN_KEY
-   Access token secret  TOKEN_SECRET
-   ===================  ===============
+   - Consumer key --> CONSUMER_KEY
+   - Consumer secret --> CONSUMER_SECRET
+   - Access token --> TOKEN_KEY
+   - Access token secret --> TOKEN_SECRET
 
 #) Via the `admin interface`_, add your accounts and hashtags.
 
