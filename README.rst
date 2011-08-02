@@ -2,28 +2,31 @@
 django-carson
 =============
 
-django-carson makes it easy to collect tweets from a given set of
-users as well as tweets using a specific hashtag.
+django-carson is a Django app that makes it easy to collect tweets
+from a given set of users as well as tweets containing a specific
+hashtag or keyword.
 
 You can see it in action on TweetNevada.com_.
 
 .. _TweetNevada.com: http://tweetnevada.com
 
-The basic idea is there are Twitter accounts you want to follow (e.g.,
-Nevada lawmakers) and hashtags the "community" can use to engage in a
-collective conversation (e.g., ``#nvleg``).  What django-carson aims
-to do is make it easy to manage all of this.
+The idea is there are Twitter accounts you want to follow (*e.g.,*
+Nevada lawmakers) and hashtags or keywords the community uses to
+engage in a collective conversation (*e.g.,* ``#nvleg``).  All public
+tweets from your "whitelisted" accounts are displayed, and all public
+tweets containing your hashtags/keywords also captured and displayed.
+
+By combing the two, you create a "running conversation" about a given
+topic.  In the case of TweetNevada, it focused on Nevada's 2011 Legislative
+Session.
 
 Getting Started
 ---------------
 
 #) Install django-carson::
 
-    $ cd /tmp
-    $ git clone git://github.com/edavis/django-carson.git # PyPI support coming soon
     $ mkvirtualenv --no-site-packages example_website
-    $ cdsitepackages # or cd /path/to/virtualenv/lib/python2.7/site-packages
-    $ ln -s /tmp/django-carson/carson .
+    $ pip install django-carson
 
 #) Add ``carson`` to ``INSTALLED_APPS``::
 
@@ -35,13 +38,9 @@ Getting Started
 
 #) Configure your URLconf::
 
-    from django.conf.urls.defaults import patterns, include, url
-    from django.contrib import admin
-    admin.autodiscover()
-    
     urlpatterns = patterns(
         '',
-        url(r'^admin/', include(admin.site.urls)),
+        # ...
         url(r'^', include('carson.urls')),
     )
 
