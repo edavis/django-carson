@@ -1,7 +1,7 @@
 import sys
 import json
 from django.db import models
-from carson.utils import parse_datetime
+from carson.utils import parse_created_at
 
 class Account(models.Model):
     twitter_username = models.CharField(max_length=32)
@@ -33,7 +33,7 @@ class Tweet(models.Model):
 
         values = {
             "tweet_id"  : tweet['id'],
-            "timestamp" : tweet['created_at'],
+            "timestamp" : parse_created_at(tweet['created_at']),
             "text"      : tweet['text'],
         }
 

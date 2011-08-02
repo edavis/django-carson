@@ -9,16 +9,9 @@ import oauth2 as oauth
 from datetime import datetime
 from django.conf import settings
 
-def parse_datetime(string):
-    # Set locale for date parsing
-    locale.setlocale(locale.LC_TIME, 'C')
-
-    # We must parse datetime this way to work in python 2.4
-    date = datetime(*(time.strptime(string, '%a %b %d %H:%M:%S +0000 %Y')[0:6]), tzinfo=pytz.utc)
-
-    # Reset locale back to the default setting
-    locale.setlocale(locale.LC_TIME, '')
-    return date
+def parse_created_at(created_at):
+    t = time.strptime(created_at, "%a %b %d %H:%M:%S +0000 %Y")
+    return datetime(*t[:6], tzinfo=pytz.utc)
 
 ENDPOINT, VERSION = "stream.twitter.com", 1
 
