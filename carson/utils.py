@@ -68,7 +68,11 @@ class Streamer(object):
         buf = ""
 
         while True:
-            c = self.response.read(1)
+            try:
+                c = self.response.read(1)
+            except httplib.HTTPException:
+                continue
+
             if c == '\n':
                 break
             else:
