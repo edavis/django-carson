@@ -59,6 +59,10 @@ Getting Started
 
 #) Via the `admin interface`_, add your accounts and hashtags.
 
+#) After adding any accounts, you must either use the "Lookup Twitter
+   IDs" admin action or ``./manage.py lookup_twitter_ids`` to populate
+   each account with its Twitter ID.
+
 #) Finally, run::
 
     $ ./manage.py get_tweets
