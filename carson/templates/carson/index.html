@@ -1,7 +1,13 @@
 {% extends "carson/base.html" %}
 
 {% block content %}
-<p>trusted: {{ trusted }}</p>
+<h2>Trusted Updates</h2>
+{% for tweet in trusted %}
+<li>{{ tweet.account }}: {{ tweet.text }}</li>
+{% endfor %}
 
-<p>untrusted: {{ untrusted }}</p>
+<h2>Untrusted Updates</h2>
+{% for tweet in untrusted %}
+<li>{{ tweet.text }}</li>
+{% endfor %}
 {% endblock %}
