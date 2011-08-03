@@ -123,6 +123,10 @@ class Streamer(object):
             length = self._get_length()
             if length:
                 update = self.response.read(length)
-                Tweet.add(update, twitter_ids)
+                update = json.loads(update)
+
+                if 'in_reply_to_status_id' in update:
+                    Tweet.add(update, twitter_ids)
+
             else:
                 continue

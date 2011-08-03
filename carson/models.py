@@ -35,10 +35,6 @@ class Tweet(models.Model):
 
     @classmethod
     def add(cls, tweet, twitter_ids):
-        # Only load if passed a string
-        if isinstance(tweet, basestring):
-            tweet = json.loads(tweet)
-
         values = {
             "tweet_id"  : tweet['id'],
             "timestamp" : parse_created_at(tweet['created_at']),
