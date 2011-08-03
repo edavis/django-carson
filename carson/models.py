@@ -1,7 +1,9 @@
-import sys
 import json
+import pytz
 from django.db import models
-from carson.utils import parse_created_at
+from datetime import datetime
+from django.conf import settings
+from carson.utils import parse_created_at, write_update
 from carson.managers import TrustedManager, UntrustedManager
 
 class Account(models.Model):
@@ -50,7 +52,10 @@ class Tweet(models.Model):
 
         values['account'] = account
 
-        sys.stdout.write("Added #%d\r" % tweet['id'])
-        sys.stdout.flush()
+        now = datetime.utcnow()
+        now = now.replace(tzinfo=pytz.utc)
+        timestamp = now.astimezone(pytz.timezone(settings.TIME_ZONE))
+
+        write_update("Added #%d (%s)" % (tweet['id'], timestamp.strftime("%D %r")))
 
         return cls.objects.create(**values)

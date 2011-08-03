@@ -1,3 +1,4 @@
+import sys
 import pytz
 import json
 import time
@@ -8,6 +9,14 @@ import httplib
 import oauth2 as oauth
 from datetime import datetime
 from django.conf import settings
+
+def write_update(msg, handler=sys.stdout):
+    """
+    Write a line to ``handler``, using an ANSI escape code
+    so everything gets cleanly overwritten.
+    """
+    handler.write("\033[2K%s\r" % msg)
+    handler.flush()
 
 def lookup_twitter_ids(queryset, username_field="twitter_username"):
     usernames = queryset.values_list(username_field, flat=True)[:100]
@@ -129,4 +138,8 @@ class Streamer(object):
                     Tweet.add(update, twitter_ids)
 
             else:
-                continue
+                now = datetime.utcnow()
+                now = now.replace(tzinfo=pytz.utc)
+                timestamp = now.astimezone(pytz.timezone(settings.TIME_ZONE))
+
+                write_update("Ping! (%s)" % timestamp.strftime("%D %r"))
