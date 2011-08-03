@@ -11,12 +11,13 @@ import oauth2 as oauth
 from datetime import datetime
 from django.conf import settings
 
-def write_update(msg, handler=sys.stdout):
+def write_update(msg, handler=sys.stdout, newline=False):
     """
     Write a line to ``handler``, using an ANSI escape code
     so everything gets cleanly overwritten.
     """
-    handler.write("\033[2K%s\r" % msg)
+    nl = "\n" if newline else "\r"
+    handler.write("\033[2K%s%s" % (msg, nl))
     handler.flush()
 
 def lookup_twitter_ids(queryset, username_field="twitter_username"):

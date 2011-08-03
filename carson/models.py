@@ -56,6 +56,6 @@ class Tweet(models.Model):
         now = now.replace(tzinfo=pytz.utc)
         timestamp = now.astimezone(pytz.timezone(settings.TIME_ZONE))
 
-        write_update("Added #%d (%s)" % (tweet['id'], timestamp.strftime("%D %r")))
+        write_update("Added #%d (%s)" % (tweet['id'], timestamp.strftime("%D %r")), newline=True)
 
         return cls.objects.create(**values)
