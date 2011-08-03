@@ -3,11 +3,11 @@
 {% block content %}
 <h2>Trusted Updates</h2>
 {% for tweet in trusted %}
-<li>{{ tweet.account }}: {{ tweet.text }}</li>
+<li>{{ tweet.account }}: {{ tweet.data }}</li>
 {% endfor %}
 
 <h2>Untrusted Updates</h2>
 {% for tweet in untrusted %}
-<li>{{ tweet.text }}</li>
+<li>{{ tweet.data }}</li>
 {% endfor %}
 {% endblock %}
