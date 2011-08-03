@@ -115,12 +115,14 @@ class Streamer(object):
         self.response = connection.getresponse()
 
         # Placed here because otherwise it would trigger a circular-import
-        from carson.models import Tweet
+        from carson.models import Tweet, Account
+
+        twitter_ids = Account.objects.values_list('twitter_id', flat=True)
 
         while True:
             length = self._get_length()
             if length:
                 update = self.response.read(length)
-                Tweet.add(update)
+                Tweet.add(update, twitter_ids)
             else:
                 continue

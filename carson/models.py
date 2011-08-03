@@ -34,7 +34,7 @@ class Tweet(models.Model):
         ordering = ["-timestamp"]
 
     @classmethod
-    def add(cls, tweet):
+    def add(cls, tweet, twitter_ids):
         # Only load if passed a string
         if isinstance(tweet, basestring):
             tweet = json.loads(tweet)
@@ -45,10 +45,11 @@ class Tweet(models.Model):
             "text"      : tweet['text'],
         }
 
-        # If the tweet came from a whitelisted Account, include it
-        try:
-            account = Account.objects.get(twitter_id=tweet['user']['id'])
-        except Account.DoesNotExist:
+        twitter_id = tweet['user']['id']
+
+        if twitter_id in twitter_ids:
+            account = Account.objects.get(twitter_id=twitter_id)
+        else:
             account = None
 
         values['account'] = account
