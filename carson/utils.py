@@ -85,6 +85,9 @@ class Streamer(object):
                 c = self.response.read(1)
             except httplib.HTTPException:
                 continue
+            except KeyboardInterrupt:
+                sys.stderr.write("\nExiting...\n")
+                raise SystemExit
 
             if c == '\n':
                 break
