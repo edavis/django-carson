@@ -24,7 +24,8 @@ def lookup_twitter_ids(queryset, username_field="twitter_username"):
     usernames = ",".join(usernames)
 
     http = httplib2.Http('/tmp/httplib2/')
-    httplib2.debuglevel = 1
+    if getattr(settings, 'HTTP_DEBUG', False):
+        httplib2.debuglevel = 1
 
     consumer = oauth.Consumer(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
     token    = oauth.Token(settings.TOKEN_KEY, settings.TOKEN_SECRET)
@@ -116,7 +117,8 @@ class Streamer(object):
 
         # Configure a raw HTTP connection to stream.twitter.com
         connection = httplib.HTTPConnection(ENDPOINT)
-        connection.set_debuglevel(1)
+        if getattr(settings, 'HTTP_DEBUG', False):
+            connection.set_debuglevel(1)
 
         connection.request(method  = "POST",
                            url     = "/%d/statuses/filter.json" % VERSION,

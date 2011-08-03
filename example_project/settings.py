@@ -151,6 +151,7 @@ CONSUMER_KEY = None
 CONSUMER_SECRET = None
 TOKEN_KEY = None
 TOKEN_SECRET = None
+HTTP_DEBUG = False
 
 try:
     from local_settings import *
