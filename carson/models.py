@@ -5,6 +5,7 @@ from datetime import datetime
 from django.conf import settings
 from carson.utils import parse_created_at, write_update
 from carson.managers import TrustedManager, UntrustedManager
+from django_extensions.db.fields import json
 
 class Account(models.Model):
     twitter_username = models.CharField("Username", help_text="Minus the '@' sign", max_length=32)
@@ -21,9 +22,7 @@ class Tag(models.Model):
 
 class Tweet(models.Model):
     account = models.ForeignKey(Account, null=True, related_name="tweets")
-    tweet_id = models.BigIntegerField()
-    timestamp = models.DateTimeField()
-    text = models.TextField()
+    data = json.JSONField()
 
     objects = models.Manager()
     trusted = TrustedManager()
@@ -32,15 +31,10 @@ class Tweet(models.Model):
     def __unicode__(self):
         return u"#%d" % self.tweet_id
 
-    class Meta:
-        ordering = ["-timestamp"]
-
     @classmethod
     def add(cls, tweet, twitter_ids):
         values = {
-            "tweet_id"  : tweet['id'],
-            "timestamp" : parse_created_at(tweet['created_at']),
-            "text"      : tweet['text'],
+            "data": tweet,
         }
 
         twitter_id = tweet['user']['id']
