@@ -6,6 +6,7 @@ import urllib
 import pprint
 import locale
 import httplib
+import httplib2
 import oauth2 as oauth
 from datetime import datetime
 from django.conf import settings
@@ -22,7 +23,8 @@ def lookup_twitter_ids(queryset, username_field="twitter_username"):
     usernames = queryset.values_list(username_field, flat=True)[:100]
     usernames = ",".join(usernames)
 
-    connection = httplib.HTTPConnection("api.twitter.com")
+    http = httplib2.Http('/tmp/httplib2/')
+    httplib2.debuglevel = 1
 
     consumer = oauth.Consumer(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
     token    = oauth.Token(settings.TOKEN_KEY, settings.TOKEN_SECRET)
@@ -38,18 +40,18 @@ def lookup_twitter_ids(queryset, username_field="twitter_username"):
         "include_entities"   : 0,
     }
 
-    request = oauth.Request("POST", "http://api.twitter.com/1/users/lookup.json", params)
+    url = "http://api.twitter.com/1/users/lookup.json"
+    request = oauth.Request("POST", url, params)
     request.sign_request(oauth.SignatureMethod_HMAC_SHA1(), consumer, token)
 
-    connection.request(
+    response, content = http.request(
+        uri = url,
         method = "POST",
-        url = "/1/users/lookup.json",
         body = urllib.urlencode(request),
         headers = {"Content-Type": "application/x-www-form-urlencoded"},
     )
 
-    response = connection.getresponse()
-    response = json.loads(response.read())
+    response = json.loads(content)
 
     updated = 0
     for obj in response:
