@@ -71,11 +71,10 @@ the tweets stored with ``get_tweets`` above.
 
 Each ``Tweet`` object has two attributes:
 
-  - **account** is a ForeignKey that points to the ``Account`` object
-    that created the tweet.  If the ``Tweet`` object is "untrusted",
-    ``account`` will be ``None``.
+  - **account**: A ForeignKey that points to the ``Account`` object
+    that created the tweet, if applicable, otherwise ``None``.
 
-  - **data** stores the complete, decoded JSON_ object associated with the
+  - **data**: Stores the complete, decoded JSON_ object associated with the
     tweet.  As this value will be a regular dictionary, Django's
     `template syntax`_ will be able to access everything_ about the
     status update.
@@ -84,14 +83,14 @@ Attached to this ``Tweet`` class are three managers:
 
   - ``objects``: all tweets
   - ``trusted``: tweets from accounts created in the admin (i.e.,
-    ``Tweet.account`` != ``None``)
+    ``Tweet.account != None``)
   - ``untrusted``: tweets mentioning your tags (i.e.,
-    ``Tweet.account`` == ``None``)
+    ``Tweet.account == None``)
 
 A simple index view exists in ``carson.views.index`` which grabs the
 20 most recent trusted and untrusted tweets and renders
 ``carson/index.html`` (with the context variables ``trusted`` and
-``untrusted``).
+``untrusted``).  Might be useful if your website isn't too complex.
 
 .. _create a new application: https://dev.twitter.com/apps/new
 .. _admin interface: http://localhost:8000/admin/carson/
