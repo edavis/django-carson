@@ -2,70 +2,104 @@
 django-carson
 =============
 
-django-carson is a Django app that makes it easy to collect tweets
-from a given set of users as well as tweets containing a specific
-hashtag or keyword.
+django-carson makes it easy to store tweets sent by a given set of
+users along with tweets containing a specific hashtag or keyword.
 
-You can see it in action on TweetNevada.com_.
+To get an idea of the uses of django-carson, take a look at
+TweetNevada_.
 
-.. _TweetNevada.com: http://tweetnevada.com
-
-The idea is there are Twitter accounts you want to follow (*e.g.,*
-Nevada lawmakers) and hashtags or keywords the community uses to
-engage in a collective conversation (*e.g.,* ``#nvleg``).  All public
-tweets from your "whitelisted" accounts are displayed, and all public
-tweets containing your hashtags/keywords also captured and displayed.
-
-By combing the two, you create a "running conversation" about a given
-topic.  In the case of TweetNevada, it focused on Nevada's 2011 Legislative
-Session.
+The basic idea is you'll have a set of Twitter accounts you want to
+follow (e.g., Nevada lawmakers) and a set of common hashtags and/or
+keywords (e.g., ``#nvleg``) used by the community to engage in a
+collective conversation about a given topic.  When the two components
+are combined on the same page, you get a very dynamic and interesting
+conversation taking place.
 
 Getting Started
 ---------------
 
 #) Install django-carson::
 
-    $ mkvirtualenv --no-site-packages example_website
-    $ pip install django-carson
+     $ mkvirtualenv --no-site-packages example_website
+     $ pip install django-carson
 
-#) Add ``carson`` to ``INSTALLED_APPS``::
+#) Add ``carson`` to your ``INSTALLED_APPS``
 
-    INSTALLED_APPS = (
-        # ...
-        'carson',
-        # ...
-    )
+#) Create the database tables with ``syncdb`` (or ``migrate carson`` if you
+   use South_)
 
-#) Configure your URLconf::
+#) To access the `Twitter Streaming API`_, you must first create the
+   appropriate tokens.
 
-    urlpatterns = patterns(
-        '',
-        # ...
-        url(r'^', include('carson.urls')),
-    )
+   First, `create a new application`_.  Then, click "Create my access token."
 
-#) Create the appropriate OAuth tokens.  This is required to get
-   access to the Twitter Streaming API.
+   Once done, add the values of "Consumer Key," "Consumer secret,"
+   "Access token," and "Access token secret" to ``settings.py`` as
+   ``CONSUMER_KEY``, ``CONSUMER_SECRET``, ``TOKEN_KEY``, and
+   ``TOKEN_SECRET``, respectively.
 
-   1) `Create a new application`_
-   2) Click "Create my access token"
+#) Via the `admin interface`_, add your accounts and hashtags/keywords.
 
-   Add these tokens to settings.py:
+   Note: You're not required to add both accounts and
+   hashtags/keywords.  If you wanted, you could design a site that
+   only listened for hashtag mentions or only stored tweets sent by a
+   given set of users.
 
-   - Consumer key --> CONSUMER_KEY
-   - Consumer secret --> CONSUMER_SECRET
-   - Access token --> TOKEN_KEY
-   - Access token secret --> TOKEN_SECRET
-
-#) Via the `admin interface`_, add your accounts and hashtags.
-
-#) After adding any accounts, you must either use the "Lookup Twitter
-   IDs" admin action or ``./manage.py lookup_twitter_ids`` to populate
-   each account with its Twitter ID.
+#) If you added any accounts, you must either run ``./manage.py
+   lookup_twitter_ids`` or use the "Lookup Twitter IDs" admin action
+   before the next step will work.
 
 #) Finally, run::
 
-    $ ./manage.py get_tweets
+     $ ./manage.py get_tweets
 
-.. _Create a new application: https://dev.twitter.com/apps/new
+   This will open a connection to the `Twitter Streaming API`_ and
+   immediately after one of your accounts posts a tweet or a
+   tweet is created mentioning one of your tags, that tweet will be
+   stored.
+
+Usage
+-----
+
+django-carson only exists as a simple bridge between Django and the
+Twitter Streaming API.  As such, it is up to the web developer to
+wire up the views and templates needed to display the data.
+
+The main entry point for any developer using carson is likely to be
+the ``Tweet`` class in models.py_.  This is the model that holds all
+the tweets stored with ``get_tweets`` above.
+
+Each ``Tweet`` object has two attributes:
+
+  - **account** is a ForeignKey that points to the ``Account`` object
+    that created the tweet.  If the ``Tweet`` object is "untrusted",
+    ``account`` will be ``None``.
+
+  - **data** stores the complete, decoded JSON_ object associated with the
+    tweet.  As this value will be a regular dictionary, Django's
+    `template syntax`_ will be able to access everything_ about the
+    status update.
+
+Attached to this ``Tweet`` class are three managers:
+
+  - ``objects``: all tweets
+  - ``trusted``: tweets from accounts created in the admin (i.e.,
+    ``Tweet.account`` != ``None``)
+  - ``untrusted``: tweets mentioning your tags (i.e.,
+    ``Tweet.account`` == ``None``)
+
+A simple index view exists in ``carson.views.index`` which grabs the
+20 most recent trusted and untrusted tweets and renders
+``carson/index.html`` (with the context variables ``trusted`` and
+``untrusted``).
+
+.. _create a new application: https://dev.twitter.com/apps/new
 .. _admin interface: http://localhost:8000/admin/carson/
+.. _Twitter Streaming API: https://dev.twitter.com/docs/streaming-api
+.. _TweetNevada: http://tweetnevada.com/
+.. _models.py: https://github.com/edavis/django-carson/tree/master/carson/models.py
+.. _views.py: https://github.com/edavis/django-carson/tree/master/carson/views.py
+.. _JSON: http://en.wikipedia.org/wiki/JSON
+.. _template syntax: https://docs.djangoproject.com/en/1.3/topics/templates/#variables
+.. _everything: https://dev.twitter.com/docs/api/1/get/statuses/show/%3Aid
+.. _South: http://south.aeracode.org/
