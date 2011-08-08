@@ -1,4 +1,0 @@
-pytz==2011h
-oauth2==1.5.170
-httplib2==0.7.1
--e git+git://github.com/django-extensions/django-extensions.git@7b57dcf6afa8b7dd17bcffd44d1c93d9de767ef3#egg=django-extensions
