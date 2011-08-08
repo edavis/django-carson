@@ -2,3 +2,4 @@
 example_project/local_settings.py
 README.html
 *.egg-info
+dist
