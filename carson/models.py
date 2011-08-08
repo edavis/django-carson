@@ -28,9 +28,6 @@ class Tweet(models.Model):
     trusted = TrustedManager()
     untrusted = UntrustedManager()
 
-    def __unicode__(self):
-        return u"#%d" % self.tweet_id
-
     @classmethod
     def add(cls, tweet, twitter_ids):
         values = {
