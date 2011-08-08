@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
+import carson
 
 setup(
     name         = "django-carson",
-    version      = "0.1",
+    version      = carson.__version__,
     packages     = find_packages(),
     url          = "https://github.com/edavis/django-carson",
     author       = "Eric Davis",
