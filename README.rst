@@ -73,7 +73,7 @@ The main entry point for any developer using ``carson`` is likely to
 be ``carson.models.Tweet``.  This model holds all tweets stored with
 ``get_tweets``.
 
-Each ``carson.models.Tweet`` object has three attributes:
+Each ``carson.models.Tweet`` object has four attributes:
 
   **account**
     A ForeignKey pointing to the ``carson.models.Account`` that
@@ -81,7 +81,11 @@ Each ``carson.models.Tweet`` object has three attributes:
     didn't come from an account listed in ``carson.models.Account``.
 
   **timestamp**
-    The UTC timestamp of the tweet
+    The UTC timestamp of the tweet.
+
+  **status_id**
+    The unique status id for each tweet.  This is also in data['id'],
+    but this allows an index to be created for it.
 
   **data**
     Stores the complete JSON_ object associated with the tweet.  You

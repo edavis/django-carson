@@ -23,6 +23,7 @@ class Tag(models.Model):
 class Tweet(models.Model):
     account = models.ForeignKey(Account, null=True, related_name="tweets")
     timestamp = models.DateTimeField()
+    status_id = models.BigIntegerField()
     data = JSONField()
 
     objects = models.Manager()
@@ -30,13 +31,14 @@ class Tweet(models.Model):
     untrusted = UntrustedManager()
 
     class Meta:
-        ordering = ("-timestamp", "-id")
+        ordering = ("-timestamp", "-status_id")
 
     @classmethod
     def add(cls, tweet, twitter_ids):
         values = {
             "data": tweet,
             "timestamp": parse_created_at(tweet['created_at']),
+            "status_id": tweet['id'],
         }
 
         twitter_id = tweet['user']['id']
