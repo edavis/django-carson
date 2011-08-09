@@ -103,6 +103,10 @@ A simple index view exists in ``carson.views.index`` which grabs the
 ``carson/index.html`` (with the context variables ``trusted`` and
 ``untrusted``).  Might be useful if your website isn't too complex.
 
+If you seem to be having problems accessing the Twitter API, you can
+set ``HTTP_DEBUG`` to ``True`` in ``settings.py``.  By default it is
+``False``.
+
 .. _create a new application: https://dev.twitter.com/apps/new
 .. _admin interface: http://localhost:8000/admin/carson/
 .. _Twitter Streaming API: https://dev.twitter.com/docs/streaming-api
