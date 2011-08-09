@@ -32,6 +32,7 @@ class Tweet(models.Model):
 
     class Meta:
         ordering = ("-timestamp", "-status_id")
+        get_latest_by = "timestamp"
 
     @classmethod
     def add(cls, tweet, twitter_ids):
