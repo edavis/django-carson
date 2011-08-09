@@ -27,16 +27,10 @@ class Command(BaseCommand):
         follow = ",".join(map(str, accounts.values_list('twitter_id', flat=True)))
         track = ",".join(tags.values_list('name', flat=True))
 
-        # If you pass an empty value to Streamer.main(), it doesn't work
         params = {}
-        if follow:
-            params['follow'] = follow
-            sys.stdout.write("Following: '%s'\n" % follow)
-        if track:
-            params['track'] = track
-            sys.stdout.write("Tracking:  '%s'\n" % track)
 
-        sys.stdout.flush()
+        if follow: params['follow'] = follow
+        if track: params['track'] = track
 
         streamer = Streamer()
         streamer.main(**params)
