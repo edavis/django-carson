@@ -29,6 +29,9 @@ class Tweet(models.Model):
     trusted = TrustedManager()
     untrusted = UntrustedManager()
 
+    class Meta:
+        ordering = ("-timestamp", "-id")
+
     @classmethod
     def add(cls, tweet, twitter_ids):
         values = {
