@@ -5,7 +5,7 @@ from datetime import datetime
 from django.conf import settings
 from carson.utils import parse_created_at, write_update
 from carson.managers import TrustedManager, UntrustedManager
-from django_extensions.db.fields import json
+from annoying.fields import JSONField
 
 class Account(models.Model):
     twitter_username = models.CharField("Username", help_text="Minus the '@' sign", max_length=32)
@@ -22,7 +22,7 @@ class Tag(models.Model):
 
 class Tweet(models.Model):
     account = models.ForeignKey(Account, null=True, related_name="tweets")
-    data = json.JSONField()
+    data = JSONField()
 
     objects = models.Manager()
     trusted = TrustedManager()
@@ -42,9 +42,5 @@ class Tweet(models.Model):
             account = None
 
         values['account'] = account
-
-        now = datetime.utcnow()
-        now = now.replace(tzinfo=pytz.utc)
-        timestamp = now.astimezone(pytz.timezone(settings.TIME_ZONE))
 
         return cls.objects.create(**values)
