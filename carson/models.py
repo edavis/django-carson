@@ -22,6 +22,7 @@ class Tag(models.Model):
 
 class Tweet(models.Model):
     account = models.ForeignKey(Account, null=True, related_name="tweets")
+    timestamp = models.DateTimeField()
     data = JSONField()
 
     objects = models.Manager()
@@ -32,6 +33,7 @@ class Tweet(models.Model):
     def add(cls, tweet, twitter_ids):
         values = {
             "data": tweet,
+            "timestamp": parse_created_at(tweet['created_at']),
         }
 
         twitter_id = tweet['user']['id']
