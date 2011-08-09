@@ -22,8 +22,8 @@ class Tag(models.Model):
 
 class Tweet(models.Model):
     account = models.ForeignKey(Account, null=True, related_name="tweets")
-    timestamp = models.DateTimeField()
-    status_id = models.BigIntegerField()
+    timestamp = models.DateTimeField(db_index=True)
+    status_id = models.BigIntegerField(db_index=True)
     data = JSONField()
 
     objects = models.Manager()
