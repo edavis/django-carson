@@ -27,7 +27,7 @@ class Migration(SchemaMigration):
         db.create_table('carson_tweet', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('account', self.gf('django.db.models.fields.related.ForeignKey')(related_name='tweets', null=True, to=orm['carson.Account'])),
-            ('data', self.gf('django.db.models.fields.TextField')(default='{}')),
+            ('data', self.gf('django.db.models.fields.TextField')()),
         ))
         db.send_create_signal('carson', ['Tweet'])
 
@@ -59,7 +59,7 @@ class Migration(SchemaMigration):
         'carson.tweet': {
             'Meta': {'object_name': 'Tweet'},
             'account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'tweets'", 'null': 'True', 'to': "orm['carson.Account']"}),
-            'data': ('django.db.models.fields.TextField', [], {'default': "'{}'"}),
+            'data': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         }
     }

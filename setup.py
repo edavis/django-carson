@@ -14,7 +14,6 @@ setup(
         "pytz==2011h",
         "oauth2==1.5.170",
         "httplib2==0.7.1",
-        "django-annoying==0.7.6",
     ],
     classifiers      = [
         "Development Status :: 4 - Beta",

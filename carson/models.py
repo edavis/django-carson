@@ -5,7 +5,7 @@ from datetime import datetime
 from django.conf import settings
 from carson.utils import parse_created_at, write_update
 from carson.managers import TrustedManager, UntrustedManager
-from annoying.fields import JSONField
+from carson.json_field import JSONField
 
 class Account(models.Model):
     twitter_username = models.CharField("Username", help_text="Minus the '@' sign", max_length=32)
