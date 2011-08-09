@@ -3,7 +3,7 @@ django-carson
 =============
 
 django-carson makes it easy to store and display tweets about a given
-topic or tweets from a group of users.
+topic or from a set of users.
 
 For an idea of how django-carson can be used, take a look at
 TweetNevada_.
