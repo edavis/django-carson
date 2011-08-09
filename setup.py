@@ -8,7 +8,7 @@ setup(
     url              = "https://github.com/edavis/django-carson",
     author           = "Eric Davis",
     author_email     = "ed@npri.org",
-    description      = "Store tweets posted by a set of users along with tweets containing certain hashtags and/or keywords",
+    description      = "Easily store and display tweets about a given topic or tweets from a group of users",
     long_description = open('README.rst').read(),
     install_requires = [
         "pytz==2011h",
