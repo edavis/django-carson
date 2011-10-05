@@ -124,7 +124,7 @@ set ``HTTP_DEBUG`` to ``True`` in ``settings.py``.  By default it is
 Changelog
 ---------
 
-**0.2 (Unreleased)**
+**0.2 (October 5th, 2011)**
   - Use SSL for Streaming and REST APIs
   - Document and test some utility methods
   - Use `requests <http://requests.readthedocs.org/en/latest/>`_ for
