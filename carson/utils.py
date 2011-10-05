@@ -80,16 +80,7 @@ def lookup_twitter_ids(queryset, username_field="twitter_username"):
         include_entities = 0,
     )
     response = twitter_api_call("/users/lookup.json", body)
-
-    updated = 0
-    for obj in response:
-        lookup = {username_field: obj["screen_name"]}
-        account = queryset.model.objects.get(**lookup)
-        account.twitter_id = obj["id"]
-        account.save()
-        updated += 1
-
-    return updated
+    return queryset.model.attach_twitter_ids(response)
 
 def parse_created_at(created_at):
     t = time.strptime(created_at, "%a %b %d %H:%M:%S +0000 %Y")

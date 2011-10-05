@@ -14,6 +14,20 @@ class Account(models.Model):
     def __unicode__(self):
         return u"@%s" % self.twitter_username
 
+    @classmethod
+    def attach_twitter_ids(cls, response, username_field="twitter_username"):
+        """
+        For each account in the response, lookup the Account object
+        and attach their Twitter ID to it.
+        """
+        updated = 0
+        for obj in response:
+            account = cls.objects.get(**{username_field: obj['screen_name']})
+            account.twitter_id = obj['id']
+            account.save()
+            updated += 1
+        return updated
+
 class Tag(models.Model):
     name = models.CharField(max_length=60)
 
