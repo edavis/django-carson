@@ -1,3 +1,4 @@
+import re
 from django.test import TestCase
 from carson.models import Account
 
@@ -5,16 +6,17 @@ class TwitterUtilsTestCase(TestCase):
     def test_write_update(self):
         from carson.utils import write_update
         from cStringIO import StringIO
+        from datetime import datetime
 
         buf = StringIO()
         write_update("foo", buf)
         buf.seek(0)
-        self.assertEqual(buf.read(), "\033[2Kfoo\r")
+        self.assertTrue(re.search(r"\033\[2Kfoo (.+)\r", buf.read()))
 
-        buf.seek(0)
+        buf = StringIO()
         write_update("foo", buf, newline=True)
         buf.seek(0)
-        self.assertEqual(buf.read(), "\033[2Kfoo\n")
+        self.assertTrue("\n" in buf.read())
 
     def test_parse_created_at(self):
         import pytz

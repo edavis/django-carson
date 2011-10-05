@@ -16,8 +16,12 @@ def write_update(msg, handler=sys.stdout, newline=False):
     Write a line to ``handler``, using an ANSI escape code
     so everything gets cleanly overwritten.
     """
+    now = datetime.utcnow()
+    now = now.replace(tzinfo=pytz.utc)
+    now = now.astimezone(pytz.timezone(settings.TIME_ZONE))
+
     nl = "\n" if newline else "\r"
-    handler.write("\033[2K%s%s" % (msg, nl))
+    handler.write("\033[2K%s (%s)%s" % (msg, now.strftime("%D %r"), nl))
     handler.flush()
 
 def get_credentials():

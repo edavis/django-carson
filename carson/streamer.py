@@ -65,15 +65,7 @@ class Streamer(object):
 
                 if 'in_reply_to_status_id' in update:
                     Tweet.add(update, twitter_ids)
-
-                    now = datetime.utcnow()
-                    now = now.replace(tzinfo=pytz.utc)
-                    timestamp = now.astimezone(pytz.timezone(settings.TIME_ZONE))
-                    write_update("Added #%d (%s)" % (update['id'], timestamp.strftime("%D %r")), newline=True)
+                    write_update("Added #%d" % update['id'], newline=True)
 
             else:
-                now = datetime.utcnow()
-                now = now.replace(tzinfo=pytz.utc)
-                timestamp = now.astimezone(pytz.timezone(settings.TIME_ZONE))
-
-                write_update("Ping! (%s)" % timestamp.strftime("%D %r"))
+                write_update("Ping!")
