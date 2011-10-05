@@ -9,4 +9,6 @@ class Command(BaseCommand):
         if accounts:
             updated = lookup_twitter_ids(accounts)
             sys.stdout.write("%d account(s) updated\n" % updated)
-            sys.stdout.flush()
+        else:
+            sys.stdout.write("All accounts have their Twitter IDs\n")
+        sys.stdout.flush()
