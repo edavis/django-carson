@@ -21,6 +21,17 @@ def write_update(msg, handler=sys.stdout, newline=False):
     handler.flush()
 
 def lookup_twitter_ids(queryset, username_field="twitter_username"):
+    """
+    Given a QuerySet of Accounts, fill in the ``twitter_id`` field.
+
+    This saves us from having to call /users/lookup.json each time we
+    create the Streamer but also doesn't force the website operator to
+    find each Twitter ID (which can be cumbersome) when they add the
+    account.
+
+    We *could* do something like this when the Account object is
+    created, but we're good people so bulk lookups are better.
+    """
     usernames = queryset.values_list(username_field, flat=True)[:100]
     usernames = ",".join(usernames)
 
