@@ -83,6 +83,11 @@ def lookup_twitter_ids(queryset, username_field="twitter_username"):
     return queryset.model.attach_twitter_ids(response)
 
 def parse_created_at(created_at):
+    """
+    Coerce Twitter datetimes into a Python datetime object and set its
+    timezone to UTC.
+    """
+    assert "+0000" in created_at, "Not in UTC, something might be wrong."
     t = time.strptime(created_at, "%a %b %d %H:%M:%S +0000 %Y")
     return datetime(*t[:6], tzinfo=pytz.utc)
 

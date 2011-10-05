@@ -16,6 +16,18 @@ class TwitterUtilsTestCase(TestCase):
         buf.seek(0)
         self.assertEqual(buf.read(), "\033[2Kfoo\n")
 
+    def test_parse_created_at(self):
+        import pytz
+        from datetime import datetime
+        from carson.utils import parse_created_at
+
+        self.assertEqual(
+            parse_created_at("Wed May 23 06:01:13 +0000 2007"),
+            datetime(2007, 5, 23, 6, 1, 13, tzinfo=pytz.utc))
+
+        self.assertRaises(AssertionError,
+                          parse_created_at, "Wed May 23 06:01:13 -7000 2007")
+
 
 class TwitterAccountTestCase(TestCase):
     def test_lookup_twitter_ids(self):
