@@ -6,7 +6,7 @@ import httplib
 from datetime import datetime
 from django.conf import settings
 from carson.utils import (
-    generate_signed_request, get_credentials, write_update)
+    generate_signed_request, get_credentials, write_update, http_debug)
 
 class Streamer(object):
     def __init__(self):
@@ -44,6 +44,9 @@ class Streamer(object):
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
         connection = httplib.HTTPSConnection("stream.twitter.com")
+        if http_debug():
+            connection.set_debuglevel(1)
+
         connection.request(
             method = "POST",
             url = "/1/statuses/filter.json",

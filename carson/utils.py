@@ -11,6 +11,12 @@ import oauth2 as oauth
 from datetime import datetime
 from django.conf import settings
 
+def http_debug():
+    return getattr(settings, 'HTTP_DEBUG', False)
+
+if http_debug():
+    requests.settings.verbose = sys.stderr
+
 def write_update(msg, handler=sys.stdout, newline=False):
     """
     Write a line to ``handler``, using an ANSI escape code
