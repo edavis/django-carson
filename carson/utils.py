@@ -27,20 +27,18 @@ def get_credentials():
         token = oauth.Token(settings.TOKEN_KEY, settings.TOKEN_SECRET)
     )
 
-def twitter_api_call(method, body):
+def generate_signed_request(url, body):
     """
-    Call the given Twitter REST API method with a body.
+    Do the generic oauth signing needed for the REST and Streaming
+    APIs.
+
+    This function returns a dict that is passed as the body of a POST
+    call.
     """
-    assert method.endswith(".json"), "It's 2011, use JSON"
-
-    if not method.startswith("/"):
-        method = "/" + method
-
     credentials = get_credentials()
     consumer = credentials['consumer']
     token = credentials['token']
 
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
     params = {
         "oauth_version"      : "1.0",
         "oauth_nonce"        : oauth.generate_nonce(),
@@ -50,12 +48,19 @@ def twitter_api_call(method, body):
     }
     params.update(body)
 
-    url = "https://api.twitter.com/1" + method
-
     request = oauth.Request("POST", url, params)
     request.sign_request(oauth.SignatureMethod_HMAC_SHA1(), consumer, token)
+    return request
 
-    response = requests.post(url, data=params, headers=headers)
+def twitter_api_call(method, body):
+    """
+    Call the given Twitter REST API method with a body.
+    """
+    assert method.endswith(".json"), "It's 2011, use JSON"
+    url = "https://api.twitter.com/1/" + method
+    data = generate_signed_request(url, body)
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    response = requests.post(url, data=data, headers=headers)
 
     if response.ok and response.content:
         return json.loads(response.content)
