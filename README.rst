@@ -120,3 +120,15 @@ set ``HTTP_DEBUG`` to ``True`` in ``settings.py``.  By default it is
 .. _TweetNevada: http://tweetnevada.com/
 .. _JSON: http://en.wikipedia.org/wiki/JSON
 .. _South: http://south.aeracode.org/
+
+Changelog
+---------
+
+**0.2 (Unreleased)**
+  - Use SSL for Streaming and REST APIs
+  - Document and test some utility methods
+  - Use `requests <http://requests.readthedocs.org/en/latest/>`_ for
+    REST API calls
+
+**0.1 (August 9th, 2011)**
+  - Initial release
