@@ -50,7 +50,7 @@ def twitter_api_call(method, body):
     }
     params.update(body)
 
-    url = "http://api.twitter.com/1" + method
+    url = "https://api.twitter.com/1" + method
 
     request = oauth.Request("POST", url, params)
     request.sign_request(oauth.SignatureMethod_HMAC_SHA1(), consumer, token)
