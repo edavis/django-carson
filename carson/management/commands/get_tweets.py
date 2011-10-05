@@ -6,7 +6,7 @@ tweets either from a whitelisted user or containing a given hashtag.
 import sys
 from django.core.management.base import BaseCommand, CommandError
 from carson.models import Account, Tag
-from carson.utils import Streamer
+from carson.streamer import Streamer
 
 class Command(BaseCommand):
     help = "Consume twitter updates"
