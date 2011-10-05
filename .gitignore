@@ -1,5 +1,5 @@
 *.py[co]
-example_project/local_settings.py
+example_project/twitter_credentials.py
 README.html
 *.egg-info
 dist
