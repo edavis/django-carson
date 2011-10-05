@@ -6,7 +6,7 @@ import urllib
 import pprint
 import locale
 import httplib
-import httplib2
+import requests
 import oauth2 as oauth
 from datetime import datetime
 from django.conf import settings
@@ -19,6 +19,48 @@ def write_update(msg, handler=sys.stdout, newline=False):
     nl = "\n" if newline else "\r"
     handler.write("\033[2K%s%s" % (msg, nl))
     handler.flush()
+
+def get_credentials():
+    return dict(
+        consumer = oauth.Consumer(settings.CONSUMER_KEY,
+                                  settings.CONSUMER_SECRET),
+        token = oauth.Token(settings.TOKEN_KEY, settings.TOKEN_SECRET)
+    )
+
+def twitter_api_call(method, body):
+    """
+    Call the given Twitter REST API method with a body.
+    """
+    assert method.endswith(".json"), "It's 2011, use JSON"
+
+    if not method.startswith("/"):
+        method = "/" + method
+
+    credentials = get_credentials()
+    consumer = credentials['consumer']
+    token = credentials['token']
+
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    params = {
+        "oauth_version"      : "1.0",
+        "oauth_nonce"        : oauth.generate_nonce(),
+        "oauth_timestamp"    : int(time.time()),
+        "oauth_token"        : token.key,
+        "oauth_consumer_key" : consumer.key,
+    }
+    params.update(body)
+
+    url = "http://api.twitter.com/1" + method
+
+    request = oauth.Request("POST", url, params)
+    request.sign_request(oauth.SignatureMethod_HMAC_SHA1(), consumer, token)
+
+    response = requests.post(url, data=params, headers=headers)
+
+    if response.ok and response.content:
+        return json.loads(response.content)
+    else:
+        response.raise_for_status()
 
 def lookup_twitter_ids(queryset, username_field="twitter_username"):
     """
@@ -33,38 +75,11 @@ def lookup_twitter_ids(queryset, username_field="twitter_username"):
     created, but we're good people so bulk lookups are better.
     """
     usernames = queryset.values_list(username_field, flat=True)[:100]
-    usernames = ",".join(usernames)
-
-    http = httplib2.Http('/tmp/httplib2/')
-    if getattr(settings, 'HTTP_DEBUG', False):
-        httplib2.debuglevel = 1
-
-    consumer = oauth.Consumer(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
-    token    = oauth.Token(settings.TOKEN_KEY, settings.TOKEN_SECRET)
-
-    params = {
-        "oauth_version"      : "1.0",
-        "oauth_nonce"        : oauth.generate_nonce(),
-        "oauth_timestamp"    : int(time.time()),
-        "oauth_token"        : token.key,
-        "oauth_consumer_key" : consumer.key,
-
-        "screen_name"        : usernames,
-        "include_entities"   : 0,
-    }
-
-    url = "http://api.twitter.com/1/users/lookup.json"
-    request = oauth.Request("POST", url, params)
-    request.sign_request(oauth.SignatureMethod_HMAC_SHA1(), consumer, token)
-
-    response, content = http.request(
-        uri = url,
-        method = "POST",
-        body = urllib.urlencode(request),
-        headers = {"Content-Type": "application/x-www-form-urlencoded"},
+    body = dict(
+        screen_name = ",".join(usernames),
+        include_entities = 0,
     )
-
-    response = json.loads(content)
+    response = twitter_api_call("/users/lookup.json", body)
 
     updated = 0
     for obj in response:

@@ -13,7 +13,7 @@ setup(
     install_requires = [
         "pytz==2011h",
         "oauth2==1.5.170",
-        "httplib2==0.7.1",
+        "requests==0.6.1",
     ],
     classifiers      = [
         "Development Status :: 4 - Beta",
